@@ -1,0 +1,51 @@
+import random
+
+
+def rotate(lists, num):
+    new_list = []
+    for x in range(len(lists) - num, len(lists)):
+        new_list.append(lists[x])
+    for x in range(0, len(lists) - num):
+        new_list.append(lists[x])
+    return new_list
+    
+
+name = input('Enter your name: ')
+print('Hello, ' + name)
+set_of_values = ['rock', 'paper', 'scissors'] 
+str_ = input()
+if len(str_) != 0:
+  set_of_values = str_.split(',')
+print('Okay, let\'s start!')
+
+fo = open('rating.txt', 'r')
+user_table = {}
+
+buffer = fo.readlines()
+
+for x in buffer:
+  user_table[x.split()[0]] = x.split()[1]
+
+rating = user_table[name] if name in user_table.keys() else 0
+
+while True:
+    command = input()
+    if command == '!exit':
+        print('Bye!')
+        break
+    elif command == '!rating':
+        print('Your rating: ' + str(rating))
+    elif command in set_of_values:
+        comp_choice = random.choice(set_of_values)
+        half = len(set_of_values) // 2
+        new_set = rotate(set_of_values, abs(half - set_of_values.index(command)))
+        if new_set.index(command) > new_set.index(comp_choice):
+            print('Well done. Computer chose {} and failed'.format(comp_choice))
+            rating += 100
+        elif new_set.index(command) == new_set.index(comp_choice):
+            print('There is a draw ({})'.format(command))
+            rating += 50
+        elif new_set.index(command) < new_set.index(comp_choice):
+            print('Sorry, but computer chose {}'.format(comp_choice))
+    else:
+        print('Invalid input')
